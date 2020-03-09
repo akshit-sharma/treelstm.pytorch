@@ -102,6 +102,10 @@ def main():
         torch.save(test_dataset, test_file)
     logger.debug('==> Size of test data    : %d ' % len(test_dataset))
 
+    logger.info('Create a SimilarityTreeLSTM with vocab.size {}, in_dim {}, mem_dim {}, hidden_dim {}, num_classes {}, sparse {} and freeze {}'.format(
+                vocab.size(), args.input_dim, args.mem_dim, args.hidden_dim,
+                args.num_classes, args.sparse, args.freeze_embed))
+
     # initialize model, criterion/loss_function, optimizer
     model = SimilarityTreeLSTM(
         vocab.size(),
@@ -112,6 +116,8 @@ def main():
         args.sparse,
         args.freeze_embed)
     criterion = nn.KLDivLoss()
+
+    return
 
     # for words common to dataset vocab and GLOVE, use GLOVE vectors
     # for other words in dataset vocab, use random normal vectors
