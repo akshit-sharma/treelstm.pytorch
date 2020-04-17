@@ -5,6 +5,13 @@ class Tree(object):
         self.num_children = 0
         self.children = list()
 
+    def __repr__(self):
+        assert self.num_children == len(self.children)
+        if self.children:
+            return '{0}: {1}'.format(self.idx, str(self.children))
+        else:
+            return str(self.idx)
+
     def add_child(self, child):
         child.parent = self
         self.num_children += 1

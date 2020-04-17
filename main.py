@@ -9,6 +9,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+from tqdm import tqdm
+
 # IMPORT CONSTANTS
 from treelstm import Constants
 # NEURAL NETWORK MODULES/LAYERS
@@ -25,6 +27,16 @@ from treelstm import utils
 from treelstm import Trainer
 # CONFIG PARSER
 from config import parse_args
+
+
+class TreeSaver:
+
+    def __init__(self):
+        pass
+
+    def save_if_unique(self, dataset):
+        for idx in tqdm(range(len(dataset)), desc='Saving unique trees'):
+
 
 
 # MAIN BLOCK
@@ -102,6 +114,11 @@ def main():
         torch.save(test_dataset, test_file)
     logger.debug('==> Size of test data    : %d ' % len(test_dataset))
 
+    tree_saver = TreeSaver()
+    tree_saver.save_if_unique(train_dataset)
+    tree_saver.save_if_unique(dev_dataset)
+    tree_saver.save_if_unique(test_dataset)
+
     logger.info('Create a SimilarityTreeLSTM with vocab.size {}, in_dim {}, mem_dim {}, hidden_dim {}, num_classes {}, sparse {} and freeze {}'.format(
                 vocab.size(), args.input_dim, args.mem_dim, args.hidden_dim,
                 args.num_classes, args.sparse, args.freeze_embed))
@@ -116,8 +133,6 @@ def main():
         args.sparse,
         args.freeze_embed)
     criterion = nn.KLDivLoss()
-
-    return
 
     # for words common to dataset vocab and GLOVE, use GLOVE vectors
     # for other words in dataset vocab, use random normal vectors
