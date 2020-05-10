@@ -30,7 +30,6 @@ class DatasetType(Enum):
     DEV = 2
     TEST = 3
 
-
 class TreeSaver:
 
     def __init__(self, folder_name, treetype):

@@ -1,3 +1,9 @@
+from enum import Enum
+
+class TreeType(Enum):
+    DEPENDENCY = 1
+    CONSTITUENCY = 2
+
 # tree object from stanfordnlp/treelstm
 class Tree(object):
     def __init__(self):
@@ -18,7 +24,7 @@ class Tree(object):
         self.children.append(child)
 
     def size(self):
-        if getattr(self, '_size'):
+        if hasattr(self, '_size'):
             return self._size
         count = 1
         for i in range(self.num_children):
@@ -27,7 +33,7 @@ class Tree(object):
         return self._size
 
     def depth(self):
-        if getattr(self, '_depth'):
+        if hasattr(self, '_depth'):
             return self._depth
         count = 0
         if self.num_children > 0:
@@ -38,3 +44,23 @@ class Tree(object):
             count += 1
         self._depth = count
         return self._depth
+
+    def leaf_size(self):
+        if hasattr(self, '_leaf_size'):
+            return self._leaf_size
+        count = 0
+        if self.num_children == 0:
+            return 1
+        for child in self.children:
+            count += child.leaf_size()
+        self._leaf_size = count
+        return self._leaf_size
+
+    def construct_graph(self, add_vertices, add_edge):
+        if add_vertices is not None:
+            add_vertices(self.size())
+        for child in self.children:
+            child.construct_graph(None, add_edge)
+            add_edge(self.idx, child.idx)
+
+

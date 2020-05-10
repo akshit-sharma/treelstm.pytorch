@@ -27,6 +27,7 @@ def dependency_parse(filepath, cp='', tokenize=True):
 
 
 def constituency_parse(filepath, cp='', tokenize=True):
+    print('\nConstituency parsing ' + filepath)
     dirpath = os.path.dirname(filepath)
     filepre = os.path.splitext(os.path.basename(filepath))[0]
     tokpath = os.path.join(dirpath, filepre + '.toks')
